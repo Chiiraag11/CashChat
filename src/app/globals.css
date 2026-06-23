@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Design token system — "ledger" direction.
+  Money is rendered in a monospaced, tabular-figure face throughout (the
+  signature element: every amount lines up like rows in a paper ledger),
+  set against a quiet ink-on-cream UI face for everything else.
+*/
+:root {
+  --background: 40 33% 97%;       /* warm off-white, #FAF8F3-ish */
+  --foreground: 222 33% 12%;      /* near-ink navy */
+  --card: 0 0% 100%;
+  --card-foreground: 222 33% 12%;
+  --primary: 160 84% 30%;         /* deep ledger-green */
+  --primary-foreground: 0 0% 100%;
+  --muted: 40 20% 92%;
+  --muted-foreground: 222 15% 40%;
+  --accent: 160 84% 94%;
+  --accent-foreground: 160 84% 22%;
+  --destructive: 4 78% 52%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 40 15% 87%;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 222 38% 8%;
+  --foreground: 40 20% 95%;
+  --card: 222 32% 11%;
+  --card-foreground: 40 20% 95%;
+  --primary: 160 70% 45%;
+  --primary-foreground: 222 38% 8%;
+  --muted: 222 20% 16%;
+  --muted-foreground: 40 10% 65%;
+  --accent: 160 50% 16%;
+  --accent-foreground: 160 70% 80%;
+  --destructive: 4 70% 55%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 222 20% 18%;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-feature-settings: 'cv11', 'ss01';
+}
+
+/* Every rendered currency figure uses this class — tabular numerals so
+   columns of amounts align like a real ledger. */
+.ledger-figure {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}

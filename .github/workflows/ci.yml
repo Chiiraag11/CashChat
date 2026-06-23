@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  # Dummy values sufficient for `prisma generate`, `tsc`, and `next build`
+  # (which only needs valid-looking env vars, not a live DB/OpenAI key).
+  DATABASE_URL: postgresql://finchat:finchat@localhost:5432/finchat?schema=public
+  NEXTAUTH_SECRET: ci-test-secret-do-not-use-in-prod
+  NEXTAUTH_URL: http://localhost:3000
+  GOOGLE_CLIENT_ID: ci-placeholder
+  GOOGLE_CLIENT_SECRET: ci-placeholder
+  GITHUB_CLIENT_ID: ci-placeholder
+  GITHUB_CLIENT_SECRET: ci-placeholder
+  OPENAI_API_KEY: ci-placeholder
+  UPSTASH_REDIS_REST_URL: https://ci-placeholder.upstash.io
+  UPSTASH_REDIS_REST_TOKEN: ci-placeholder
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: finchat
+          POSTGRES_PASSWORD: finchat
+          POSTGRES_DB: finchat
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U finchat"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Type check
+        run: npm run type-check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Run unit tests
+        run: npm run test
+
+      - name: Sync schema to CI database
+        run: npx prisma db push --accept-data-loss
+
+      - name: Build
+        run: npm run build
