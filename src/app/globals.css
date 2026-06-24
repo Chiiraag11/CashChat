@@ -3,58 +3,208 @@
 @tailwind utilities;
 
 /*
-  Design token system — "ledger" direction.
-  Money is rendered in a monospaced, tabular-figure face throughout (the
-  signature element: every amount lines up like rows in a paper ledger),
-  set against a quiet ink-on-cream UI face for everything else.
+  FinChat Design System — "Night Ledger"
+  Dark fintech with an emerald money accent and violet AI accent.
+  Signature: single aurora bloom on the landing hero only.
+  Tabular-nums on all financial figures — columns align like a paper ledger.
 */
-:root {
-  --background: 40 33% 97%;       /* warm off-white, #FAF8F3-ish */
-  --foreground: 222 33% 12%;      /* near-ink navy */
-  --card: 0 0% 100%;
-  --card-foreground: 222 33% 12%;
-  --primary: 160 84% 30%;         /* deep ledger-green */
-  --primary-foreground: 0 0% 100%;
-  --muted: 40 20% 92%;
-  --muted-foreground: 222 15% 40%;
-  --accent: 160 84% 94%;
-  --accent-foreground: 160 84% 22%;
-  --destructive: 4 78% 52%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 40 15% 87%;
-  --radius: 0.5rem;
-}
 
-.dark {
-  --background: 222 38% 8%;
-  --foreground: 40 20% 95%;
-  --card: 222 32% 11%;
-  --card-foreground: 40 20% 95%;
-  --primary: 160 70% 45%;
-  --primary-foreground: 222 38% 8%;
-  --muted: 222 20% 16%;
-  --muted-foreground: 40 10% 65%;
-  --accent: 160 50% 16%;
-  --accent-foreground: 160 70% 80%;
-  --destructive: 4 70% 55%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 222 20% 18%;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* --- Base --- */
+  --bg:          #0A0A0F;
+  --bg-subtle:   #0F0F16;
+  --surface:     #111118;
+  --surface-2:   #16161F;
+  --surface-3:   #1C1C28;
+
+  /* --- Borders --- */
+  --border:      rgba(255,255,255,0.07);
+  --border-strong: rgba(255,255,255,0.12);
+
+  /* --- Text --- */
+  --text-1:      #F2F2F7;
+  --text-2:      #8E8EA0;
+  --text-3:      #55556A;
+
+  /* --- Accents --- */
+  --emerald:     #00C896;
+  --emerald-dim: rgba(0,200,150,0.12);
+  --emerald-glow:rgba(0,200,150,0.25);
+  --violet:      #8B5CF6;
+  --violet-dim:  rgba(139,92,246,0.12);
+  --red:         #FF4D6D;
+  --red-dim:     rgba(255,77,109,0.12);
+  --amber:       #F59E0B;
+
+  /* --- Radius --- */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-xl: 20px;
+
+  /* --- Shadows --- */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.5);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.6);
+  --shadow-emerald: 0 0 24px rgba(0,200,150,0.15);
 }
 
 * {
-  border-color: hsl(var(--border));
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
-  font-feature-settings: 'cv11', 'ss01';
+  background-color: var(--bg);
+  color: var(--text-1);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
 }
 
-/* Every rendered currency figure uses this class — tabular numerals so
-   columns of amounts align like a real ledger. */
-.ledger-figure {
-  font-family: var(--font-mono), ui-monospace, monospace;
+/* --- Scrollbar --- */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+
+/* --- Financial figures: tabular nums — the core identity --- */
+.fig {
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.01em;
+  font-feature-settings: 'tnum';
+  letter-spacing: -0.02em;
+}
+
+/* --- Glass card --- */
+.glass {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.glass-hover {
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+}
+.glass-hover:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+/* --- Gradient text --- */
+.gradient-text {
+  background: linear-gradient(135deg, var(--emerald) 0%, #00E5B4 50%, var(--violet) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* --- Subtle grid overlay pattern --- */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* --- Aurora glow (landing hero ONLY) --- */
+.aurora {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.aurora::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: 30%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0,200,150,0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: auroraShift 8s ease-in-out infinite alternate;
+}
+.aurora::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  right: 15%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 65%);
+  border-radius: 50%;
+  animation: auroraShift 10s ease-in-out infinite alternate-reverse;
+}
+@keyframes auroraShift {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, 20px) scale(1.08); }
+}
+
+/* --- Status badges --- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.badge-emerald { background: var(--emerald-dim); color: var(--emerald); }
+.badge-red     { background: var(--red-dim);     color: var(--red); }
+.badge-violet  { background: var(--violet-dim);  color: var(--violet); }
+.badge-amber   { background: rgba(245,158,11,0.12); color: var(--amber); }
+
+/* --- Positive / Negative values --- */
+.val-pos { color: var(--emerald); }
+.val-neg { color: var(--red); }
+
+/* --- Animated dots (chat thinking) --- */
+@keyframes bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+  40%            { transform: translateY(-4px); opacity: 1; }
+}
+.dot-1 { animation: bounce 1.2s infinite 0ms; }
+.dot-2 { animation: bounce 1.2s infinite 150ms; }
+.dot-3 { animation: bounce 1.2s infinite 300ms; }
+
+/* --- Skeleton pulse --- */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--surface-3) 50%, var(--surface-2) 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.6s infinite;
+  border-radius: var(--r-sm);
+}
+
+/* --- Focus ring --- */
+:focus-visible {
+  outline: 2px solid var(--emerald);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+
+/* --- Reduced motion --- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
