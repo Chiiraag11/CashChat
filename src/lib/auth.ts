@@ -3,6 +3,7 @@ import GoogleProvider from 'next-auth/providers/google';
 import GitHubProvider from 'next-auth/providers/github';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '@/lib/prisma';
+import { createDemoData } from '@/lib/demoData';
 
 /**
  * NextAuth config.
@@ -28,6 +29,11 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     }),
   ],
+  events: {
+  async createUser({ user }) {
+    await createDemoData(user.id);
+  },
+},
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
