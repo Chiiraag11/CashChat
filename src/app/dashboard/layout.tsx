@@ -3,11 +3,20 @@ import { Navbar } from '@/components/layout/Navbar';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen">
+    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg)' }}>
       <Sidebar />
-      <div className="flex flex-1 flex-col">
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         <Navbar />
-        <main className="flex-1 bg-background p-6">{children}</main>
+        <main
+          style={{
+            flex: 1,
+            padding: '24px',
+            background: 'var(--bg)',
+            overflowY: 'auto',
+          }}
+        >
+          {children}
+        </main>
       </div>
     </div>
   );

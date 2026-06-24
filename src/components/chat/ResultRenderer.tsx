@@ -6,10 +6,15 @@ import {
 } from 'recharts';
 import { Code2, ChevronDown } from 'lucide-react';
 import type { ChatApiResponse } from '@/types/chat';
+import type { TooltipProps } from 'recharts';
 
 const COLORS = ['#00C896', '#8B5CF6', '#3B82F6', '#F59E0B', '#FF4D6D', '#06B6D4', '#10B981'];
 
-function ChartTooltip({ active, payload, label }: any) {
+function ChartTooltip({
+  active,
+  payload,
+  label,
+}: TooltipProps<number, string>) {
   if (!active || !payload?.length) return null;
   return (
     <div
@@ -23,7 +28,7 @@ function ChartTooltip({ active, payload, label }: any) {
       }}
     >
       {label && <div style={{ color: 'var(--text-3)', marginBottom: '4px', fontSize: '11px' }}>{label}</div>}
-      {payload.map((p: any) => (
+      {payload.map((p) => (
         <div key={p.dataKey} style={{ color: 'var(--text-1)', fontWeight: '600' }}>
           {typeof p.value === 'number' && p.value > 1000
             ? `₹${p.value.toLocaleString('en-IN')}`

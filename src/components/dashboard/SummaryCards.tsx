@@ -1,6 +1,6 @@
 'use client';
 
-import { TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight, Activity } from 'lucide-react';
+import { TrendingUp, TrendingDown, Activity } from 'lucide-react';
 import { useDashboardSummary } from '@/hooks/useDashboardSummary';
 import { formatCurrency } from '@/lib/utils';
 
@@ -122,7 +122,7 @@ export function SummaryCards() {
           color: 'var(--danger)',
         }}
       >
-        Couldn't load your summary. Try refreshing.
+        Couldn&apos;t load your summary. Try refreshing.
       </div>
     );
   }

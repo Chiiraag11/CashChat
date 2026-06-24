@@ -6,8 +6,13 @@ import {
 } from 'recharts';
 import { useMonthlyTrend } from '@/hooks/useDashboardSummary';
 import { formatCurrency } from '@/lib/utils';
+import type { TooltipProps } from 'recharts';
 
-function CustomTooltip({ active, payload, label }: any) {
+function CustomTooltip({
+  active,
+  payload,
+  label,
+}: TooltipProps<number, string>){
   if (!active || !payload?.length) return null;
   return (
     <div
@@ -22,7 +27,7 @@ function CustomTooltip({ active, payload, label }: any) {
       }}
     >
       <div style={{ color: 'var(--text-3)', marginBottom: '8px', fontSize: '11px' }}>{label}</div>
-      {payload.map((p: any) => (
+      {payload.map((p) => (
         <div
           key={p.dataKey}
           style={{
@@ -40,7 +45,7 @@ function CustomTooltip({ active, payload, label }: any) {
               fontWeight: '600',
             }}
           >
-            {formatCurrency(p.value)}
+            {formatCurrency(Number(p.value ?? 0))}
           </span>
         </div>
       ))}

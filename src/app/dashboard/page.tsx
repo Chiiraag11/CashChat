@@ -6,20 +6,51 @@ import { RecentTransactionsTable } from '@/components/dashboard/RecentTransactio
 
 export default function DashboardPage() {
   return (
-    <div className="flex flex-col gap-6">
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '20px',
+        maxWidth: '1280px',
+        animation: 'slideUp 0.4s cubic-bezier(0.16,1,0.3,1)',
+      }}
+    >
+      {/* Page header */}
       <div>
-        <h1 className="text-xl font-semibold tracking-tight">Dashboard</h1>
-        <p className="text-sm text-muted-foreground">Your spending at a glance.</p>
+        <h2
+          style={{
+            fontSize: '20px',
+            fontWeight: '700',
+            color: 'var(--text-1)',
+            letterSpacing: '-0.02em',
+          }}
+        >
+          Good morning, Chirag 👋
+        </h2>
+        <p style={{ fontSize: '13px', color: 'var(--text-3)', marginTop: '4px' }}>
+          Here&apos;s what&apos;s happening with your money.
+        </p>
       </div>
 
+      {/* KPI strip */}
       <SummaryCards />
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      {/* Charts row */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '16px',
+        }}
+      >
         <CategoryPieChart />
         <MonthlyTrendChart />
       </div>
 
+      {/* Full-width merchants */}
       <TopMerchantsTable />
+
+      {/* Full-width transactions */}
       <RecentTransactionsTable />
     </div>
   );

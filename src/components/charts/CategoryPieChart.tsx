@@ -5,12 +5,28 @@ import {
 } from 'recharts';
 import { useCategoryBreakdown } from '@/hooks/useDashboardSummary';
 import { formatCurrency } from '@/lib/utils';
+import type {
+  TooltipProps,
+  LegendProps,
+} from 'recharts';
 
 const COLORS = ['#00C896', '#8B5CF6', '#3B82F6', '#F59E0B', '#FF4D6D', '#06B6D4', '#10B981'];
 
-function CustomTooltip({ active, payload }: any) {
+function CustomTooltip({
+  active,
+  payload,
+}: TooltipProps<number, string>){
   if (!active || !payload?.length) return null;
-  const { category, total } = payload[0].payload;
+  const firstPayload = payload?.[0];
+
+if (!firstPayload || !firstPayload.payload) {
+  return null;
+}
+
+const { category, total } = firstPayload.payload as {
+  category: string;
+  total: number;
+};
   return (
     <div
       style={{
@@ -33,7 +49,7 @@ function CustomTooltip({ active, payload }: any) {
   );
 }
 
-function CustomLegend({ payload }: any) {
+function CustomLegend({ payload }: LegendProps){
   return (
     <div
       style={{
@@ -43,7 +59,7 @@ function CustomLegend({ payload }: any) {
         marginTop: '12px',
       }}
     >
-      {payload?.map((entry: any, i: number) => (
+      {payload?.map((entry, i) => (
         <div
           key={i}
           style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
@@ -106,7 +122,7 @@ export function CategoryPieChart() {
           style={{ height: '200px', width: '100%', borderRadius: '8px' }}
         />
       ) : (
-        <ResponsiveContainer width="100%" height={200}>
+        <ResponsiveContainer width="100%" height={280}>
           <PieChart>
             <Pie
               data={data}
@@ -114,8 +130,8 @@ export function CategoryPieChart() {
               nameKey="category"
               cx="50%"
               cy="50%"
-              innerRadius={60}
-              outerRadius={90}
+              innerRadius={55}
+              outerRadius={75}
               paddingAngle={3}
               strokeWidth={0}
             >

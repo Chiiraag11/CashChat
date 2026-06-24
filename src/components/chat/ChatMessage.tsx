@@ -1,4 +1,4 @@
-import { Zap, User } from 'lucide-react';
+import { Zap } from 'lucide-react';
 import { ResultRenderer } from './ResultRenderer';
 import type { ChatMessage as ChatMessageType } from '@/types/chat';
 

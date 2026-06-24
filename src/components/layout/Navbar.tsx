@@ -2,6 +2,8 @@
 
 import { usePathname } from 'next/navigation';
 import { Bell, Search } from 'lucide-react';
+import { signOut } from 'next-auth/react';
+import { LogOut } from 'lucide-react';
 
 const PAGE_TITLES: Record<string, { title: string; subtitle: string }> = {
   '/dashboard': { title: 'Overview',     subtitle: 'Your financial snapshot' },
@@ -138,25 +140,45 @@ export function Navbar() {
 
         {/* Date badge */}
         <div
-          style={{
-            height: '32px',
-            padding: '0 10px',
-            display: 'flex',
-            alignItems: 'center',
-            borderRadius: '8px',
-            background: 'var(--surface)',
-            border: '1px solid var(--border)',
-            fontSize: '11px',
-            color: 'var(--text-2)',
-            fontVariantNumeric: 'tabular-nums',
-          }}
-        >
-          {new Date().toLocaleDateString('en-IN', {
-            day: 'numeric',
-            month: 'short',
-            year: 'numeric',
-          })}
-        </div>
+  style={{
+    height: '32px',
+    padding: '0 10px',
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: '8px',
+    background: 'var(--surface)',
+    border: '1px solid var(--border)',
+    fontSize: '11px',
+    color: 'var(--text-2)',
+    fontVariantNumeric: 'tabular-nums',
+  }}
+>
+  {new Date().toLocaleDateString('en-IN', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  })}
+</div>
+
+<button
+  onClick={() => signOut({ callbackUrl: '/login' })}
+  style={{
+    height: '32px',
+    padding: '0 10px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    borderRadius: '8px',
+    background: 'var(--surface)',
+    border: '1px solid var(--border)',
+    color: 'var(--text-2)',
+    cursor: 'pointer',
+    fontSize: '12px',
+  }}
+>
+  <LogOut size={14} />
+  <span>Sign Out</span>
+</button>
       </div>
     </header>
   );
