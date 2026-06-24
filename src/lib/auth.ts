@@ -31,7 +31,11 @@ export const authOptions: NextAuthOptions = {
   ],
   events: {
   async createUser({ user }) {
+    console.log("NEW USER CREATED:", user.email);
+
     await createDemoData(user.id);
+
+    console.log("DEMO DATA CREATED FOR:", user.email);
   },
 },
   callbacks: {
