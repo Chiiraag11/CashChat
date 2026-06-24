@@ -26,7 +26,7 @@ export default function LoginPage() {
                 />
               </svg>
             </div>
-            <span className="text-lg font-semibold tracking-tight">FinChat</span>
+            <span className="text-lg font-semibold tracking-tight">CashChat</span>
           </div>
 
           {/* Headline */}
@@ -39,7 +39,7 @@ export default function LoginPage() {
           </h1>
 
           <p className="mt-5 max-w-md text-base leading-relaxed text-white/60">
-            FinChat reads your spending, income, and accounts, then answers in
+            CashChat reads your spending, income, and accounts, then answers in
             plain English — no spreadsheets, no dashboards to learn, no
             formulas to remember.
           </p>
@@ -164,7 +164,7 @@ export default function LoginPage() {
               Welcome back
             </span>
             <h2 className="mt-4 text-2xl font-semibold tracking-tight text-white">
-              Sign in to FinChat
+              Sign in to CashChat
             </h2>
             <p className="mt-1.5 text-sm text-white/50">
               Ask your money anything, anytime.

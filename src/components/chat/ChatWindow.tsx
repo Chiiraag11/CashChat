@@ -91,7 +91,7 @@ export function ChatWindow() {
                 Ask your money anything.
               </h2>
               <p style={{ fontSize: '13px', color: 'var(--text-3)', maxWidth: '360px' }}>
-                FinChat turns your transactions into answers. Try a question below, or type your own.
+                CashChat turns your transactions into answers. Try a question below, or type your own.
               </p>
             </div>
 

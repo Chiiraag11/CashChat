@@ -7,7 +7,7 @@ const sans = Inter({ subsets: ['latin'], variable: '--font-sans' });
 const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
 export const metadata: Metadata = {
-  title: 'FinChat — Ask your money anything',
+  title: 'CashChat — Ask your money anything',
   description: 'AI-powered personal finance dashboard with natural language analytics.',
 };
 

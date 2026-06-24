@@ -14,7 +14,7 @@ import {
 
 const NAV_ITEMS = [
   { href: '/dashboard', label: 'Overview',   icon: LayoutDashboard },
-  { href: '/chat',      label: 'Ask FinChat', icon: MessageSquare },
+  { href: '/chat',      label: 'Ask CashChat', icon: MessageSquare },
   { href: '/trends',    label: 'Trends',      icon: TrendingUp },
   { href: '/accounts',  label: 'Accounts',    icon: CreditCard },
 ];
@@ -75,7 +75,7 @@ export function Sidebar() {
             letterSpacing: '-0.02em',
           }}
         >
-          FinChat
+          CashChat
         </span>
       </div>
 
@@ -152,7 +152,7 @@ export function Sidebar() {
                 color={active ? 'var(--emerald)' : 'currentColor'}
               />
               {label}
-              {label === 'Ask FinChat' && (
+              {label === 'Ask CashChat' && (
                 <span
                   style={{
                     marginLeft: 'auto',

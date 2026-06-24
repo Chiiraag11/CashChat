@@ -1,4 +1,4 @@
-# FinChat
+# CashChat
 
 AI-powered personal finance dashboard with natural-language analytics. Ask
 questions like *"How much did I spend on food in May?"* and get back a real

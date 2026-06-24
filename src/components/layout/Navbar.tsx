@@ -7,7 +7,7 @@ import { LogOut } from 'lucide-react';
 
 const PAGE_TITLES: Record<string, { title: string; subtitle: string }> = {
   '/dashboard': { title: 'Overview',     subtitle: 'Your financial snapshot' },
-  '/chat':      { title: 'Ask FinChat',  subtitle: 'Natural language queries on your spending' },
+  '/chat':      { title: 'Ask CashChat',  subtitle: 'Natural language queries on your spending' },
   '/trends':    { title: 'Trends',       subtitle: 'Spending patterns over time' },
   '/accounts':  { title: 'Accounts',     subtitle: 'Connected accounts & balances' },
 };
@@ -15,7 +15,7 @@ const PAGE_TITLES: Record<string, { title: string; subtitle: string }> = {
 export function Navbar() {
   const pathname = usePathname() ?? '/dashboard';
   const match = Object.entries(PAGE_TITLES).find(([path]) => pathname.startsWith(path));
-  const { title, subtitle } = match?.[1] ?? { title: 'FinChat', subtitle: '' };
+  const { title, subtitle } = match?.[1] ?? { title: 'CashChat', subtitle: '' };
 
   return (
     <header
