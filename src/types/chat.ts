@@ -31,7 +31,7 @@ export interface ChartDatum {
 
 export interface ChatErrorResponse {
   error: string;
-  code: 'VALIDATION_ERROR' | 'UNSAFE_SQL' | 'OPENAI_ERROR' | 'DB_ERROR' | 'UNAUTHORIZED';
+  code: 'VALIDATION_ERROR' | 'UNSAFE_SQL' | 'AI_ERROR' | 'DB_ERROR' | 'UNAUTHORIZED';
 }
 
 export interface ChatMessage {
