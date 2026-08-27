@@ -24,11 +24,11 @@ answer computed from your own transaction data — not a hallucinated guess.
 
 ### Dashboard
 
-![Dashboard](src/screenshots/dashboard.png)
+![Dashboard](src/screenshots/chat.png)
 
 ### AI Chat
 
-![AI Chat](src/screenshots/chat.png)
+![AI Chat](src/screenshots/dashboard.png)
 
 ## Architecture
 
