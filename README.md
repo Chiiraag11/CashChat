@@ -20,6 +20,17 @@ answer computed from your own transaction data — not a hallucinated guess.
   Chart-data shaping → Redis cache (1h TTL) → JSON response → Chat UI
 ```
 
+## Screenshots
+
+### Dashboard
+
+![Dashboard](screenshots/dashboard.png)
+
+### AI Chat
+
+![AI Chat](screenshots/chat.png)
+
+
 ## Architecture
 
 ```mermaid
