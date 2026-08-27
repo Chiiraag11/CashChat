@@ -1,0 +1,143 @@
+// FinChat database schema
+// Postgres (AWS RDS in production, local Postgres container in dev)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+enum AccountType {
+  checking
+  savings
+}
+
+enum TransactionType {
+  debit
+  credit
+}
+
+enum TransactionCategory {
+  Food
+  Transport
+  Entertainment
+  Utilities
+  Shopping
+  Health
+  Income
+  Other
+}
+
+// ---------------------------------------------------------------------------
+// NextAuth required models (Adapter: @next-auth/prisma-adapter)
+// ---------------------------------------------------------------------------
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts_oauth")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ---------------------------------------------------------------------------
+// Domain models
+// ---------------------------------------------------------------------------
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+
+  accounts        Account[]
+  financeAccounts FinanceAccount[]
+  sessions        Session[]
+
+  @@map("users")
+}
+
+/// A financial account belonging to a user (checking / savings).
+/// Note: model is named `Account` for the finance domain; NextAuth's own
+/// OAuth-link table is mapped separately as `NextAuthAccount` to avoid
+/// a name collision.
+model FinanceAccount {
+  id        String      @id @default(cuid())
+  userId    String
+  name      String
+  type      AccountType
+  balance   Decimal     @default(0) @db.Decimal(14, 2)
+  createdAt DateTime    @default(now())
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Transaction {
+  id              String               @id @default(cuid())
+  accountId       String
+  amount          Decimal              @db.Decimal(14, 2)
+  category        TransactionCategory
+  merchant        String
+  transactionDate DateTime
+  type            TransactionType
+  createdAt       DateTime             @default(now())
+
+  account FinanceAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  // Composite + single-column indexes chosen to match the query shapes the
+  // NL->SQL pipeline generates most often: per-account history, category
+  // rollups within a date range, and merchant frequency analysis.
+  @@index([accountId])
+  @@index([category])
+  @@index([merchant])
+  @@index([transactionDate])
+  @@index([accountId, transactionDate])
+  @@index([accountId, category, transactionDate])
+  @@map("transactions")
+}
