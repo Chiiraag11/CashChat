@@ -4,6 +4,8 @@ import { usePathname } from 'next/navigation';
 import { Bell, Search } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import { LogOut } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { UserRound } from 'lucide-react';
 
 const PAGE_TITLES: Record<string, { title: string; subtitle: string }> = {
   '/dashboard': { title: 'Overview',     subtitle: 'Your financial snapshot' },
@@ -14,8 +16,15 @@ const PAGE_TITLES: Record<string, { title: string; subtitle: string }> = {
 
 export function Navbar() {
   const pathname = usePathname() ?? '/dashboard';
-  const match = Object.entries(PAGE_TITLES).find(([path]) => pathname.startsWith(path));
-  const { title, subtitle } = match?.[1] ?? { title: 'CashChat', subtitle: '' };
+  const match = Object.entries(PAGE_TITLES).find(([path]) =>
+    pathname.startsWith(path)
+  );
+  const { title, subtitle } = match?.[1] ?? {
+    title: 'CashChat',
+    subtitle: '',
+  };
+
+  const { data: session } = useSession();
 
   return (
     <header
@@ -138,6 +147,58 @@ export function Navbar() {
           />
         </button>
 
+        {/* PASTE SIGNED-IN ACCOUNT BLOCK HERE */}
+        <div
+          title={session?.user?.email ?? ''}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '4px 10px',
+            borderRadius: '8px',
+            background: 'var(--surface)',
+            border: '1px solid var(--border)',
+            maxWidth: '240px',
+            minWidth: 0,
+          }}
+        >
+          {session?.user?.image ? (
+            <img
+              src={session.user.image}
+              alt="Profile"
+              style={{
+                width: '28px',
+                height: '28px',
+                borderRadius: '50%',
+                objectFit: 'cover',
+                flexShrink: 0,
+              }}
+            />
+          ) : (
+            <UserRound size={18} style={{ flexShrink: 0 }} />
+          )}
+
+          <div style={{ minWidth: 0 }}>
+            <p style={{ fontSize: '10px', color: 'var(--text-3)', margin: 0 }}>
+              Signed in as
+            </p>
+            <p
+              style={{
+                fontSize: '11px',
+                fontWeight: 600,
+                color: 'var(--text-1)',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                margin: 0,
+              }}
+            >
+              {session?.user?.email ?? session?.user?.name ?? 'Signed in'}
+            </p>
+          </div>
+        </div>
+
+
         {/* Date badge */}
         <div
   style={{
@@ -161,7 +222,13 @@ export function Navbar() {
 </div>
 
 <button
-  onClick={() => signOut({ callbackUrl: '/login' })}
+  onClick={() => {
+  Object.keys(sessionStorage)
+    .filter((key) => key.startsWith('cashchat:'))
+    .forEach((key) => sessionStorage.removeItem(key));
+
+  void signOut({ callbackUrl: '/login' });
+}}
   style={{
     height: '32px',
     padding: '0 10px',

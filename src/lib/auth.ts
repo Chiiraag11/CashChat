@@ -13,6 +13,9 @@ import { createDemoData } from '@/lib/demoData';
  *   so route handlers and middleware can authorize requests without a DB
  *   round trip on every call.
  */
+const GMAIL_READONLY_SCOPE =
+  'https://www.googleapis.com/auth/gmail.readonly';
+
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as NextAuthOptions['adapter'],
   session: { strategy: 'jwt' },
@@ -21,10 +24,21 @@ export const authOptions: NextAuthOptions = {
   },
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      allowDangerousEmailAccountLinking: true,
-    }),
+  clientId: process.env.GOOGLE_CLIENT_ID!,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+  allowDangerousEmailAccountLinking: true,
+  authorization: {
+    params: {
+      scope: [
+        'openid',
+        'email',
+        'profile',
+        'https://www.googleapis.com/auth/gmail.readonly',
+      ].join(' '),
+      access_type: 'offline',
+    },
+  },
+}),
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
@@ -40,12 +54,31 @@ export const authOptions: NextAuthOptions = {
   },
 },
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.userId = user.id;
-      }
-      return token;
-    },
+    
+async jwt({ token, user, account }) {
+  if (user) {
+    token.userId = user.id;
+  }
+
+  if (
+    account?.provider === 'google' &&
+    account.access_token &&
+    (account.scope ?? '')
+      .split(/\s+/)
+      .includes(GMAIL_READONLY_SCOPE)
+  ) {
+    token.googleAccessToken = account.access_token;
+    token.googleRefreshToken =
+      account.refresh_token ?? token.googleRefreshToken;
+    token.googleAccessTokenExpiresAt = account.expires_at
+      ? account.expires_at * 1000
+      : Date.now() + 60 * 60 * 1000;
+    token.googleScope = account.scope ?? '';
+  }
+
+  return token;
+},
+
     async session({ session, token }) {
       if (session.user && token.userId) {
         (session.user as typeof session.user & { id: string }).id = token.userId as string;

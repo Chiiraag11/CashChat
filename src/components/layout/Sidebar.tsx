@@ -10,6 +10,7 @@ import {
   Settings,
   HelpCircle,
   Zap,
+  Mail,
 } from 'lucide-react';
 
 const NAV_ITEMS = [
@@ -17,6 +18,11 @@ const NAV_ITEMS = [
   { href: '/chat',      label: 'Ask CashChat', icon: MessageSquare },
   { href: '/trends',    label: 'Trends',      icon: TrendingUp },
   { href: '/accounts',  label: 'Accounts',    icon: CreditCard },
+  {
+  href: '/mandates',
+  label: 'Check UPI Mandates',
+  icon: Mail,
+},
 ];
 
 const NAV_BOTTOM = [
