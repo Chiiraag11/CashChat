@@ -10,6 +10,7 @@ env:
   # Dummy values sufficient for `prisma generate`, `tsc`, and `next build`
   # (which only needs valid-looking env vars, not a live DB/OpenAI key).
   DATABASE_URL: postgresql://finchat:finchat@localhost:5432/finchat?schema=public
+  DIRECT_URL: postgresql://finchat:finchat@localhost:5432/finchat?schema=public
   NEXTAUTH_SECRET: ci-test-secret-do-not-use-in-prod
   NEXTAUTH_URL: http://localhost:3000
   GOOGLE_CLIENT_ID: ci-placeholder
