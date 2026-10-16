@@ -18,7 +18,7 @@ function KPICard({ label, value, sub, trend, trendVal, accent = 'default', loadi
   const accentColor =
     accent === 'emerald' ? 'var(--emerald)' :
     accent === 'red'     ? 'var(--danger)'  :
-    accent === 'violet'  ? 'var(--violet)'  :
+    accent === 'violet'  ? 'var(--violet-text)'  :
     'var(--text-1)';
 
   const TrendIcon =
@@ -116,8 +116,8 @@ export function SummaryCards() {
         style={{
           padding: '12px 16px',
           borderRadius: '10px',
-          background: 'rgba(255,77,109,0.08)',
-          border: '1px solid rgba(255,77,109,0.2)',
+          background: 'var(--red-dim)',
+          border: '1px solid color-mix(in srgb, var(--red) 28%, transparent)',
           fontSize: '13px',
           color: 'var(--danger)',
         }}
@@ -130,13 +130,7 @@ export function SummaryCards() {
   const netSavings = data?.netSavings ?? 0;
 
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: '12px',
-      }}
-    >
+    <div className="kpi-grid">
       <KPICard
         label="Total Income"
         value={data ? formatCurrency(data.totalIncome) : '—'}

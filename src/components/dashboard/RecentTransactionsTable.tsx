@@ -6,7 +6,7 @@ import { useTransactions } from '@/hooks/useDashboardSummary';
 import { formatCurrency } from '@/lib/utils';
 
 const CATEGORY_COLORS: Record<string, { bg: string; color: string }> = {
-  Food:          { bg: 'rgba(245,158,11,0.1)',  color: '#F59E0B' },
+  Food:          { bg: 'rgba(245,158,11,0.12)', color: '#F59E0B' },
   Shopping:      { bg: 'rgba(59,130,246,0.1)',  color: '#3B82F6' },
   Health:        { bg: 'rgba(16,185,129,0.1)',  color: '#10B981' },
   Utilities:     { bg: 'rgba(139,92,246,0.1)',  color: '#8B5CF6' },
@@ -15,7 +15,10 @@ const CATEGORY_COLORS: Record<string, { bg: string; color: string }> = {
 };
 
 function getCategoryStyle(category: string) {
-  return CATEGORY_COLORS[category] ?? { bg: 'var(--surface-3)', color: 'var(--text-2)' };
+  const base = CATEGORY_COLORS[category];
+  if (!base) return { bg: 'var(--surface-3)', color: 'var(--text-2)' };
+  // Blend toward the theme's text color so the label stays readable on light and dark.
+  return { bg: base.bg, color: `color-mix(in srgb, ${base.color} 62%, var(--text-1))` };
 }
 
 export function RecentTransactionsTable() {
@@ -66,7 +69,8 @@ export function RecentTransactionsTable() {
           ))}
         </div>
       ) : (
-        <>
+        <div style={{ overflowX: 'auto' }}>
+          <div style={{ minWidth: 660 }}>
           {/* Column headers */}
           <div
             style={{
@@ -189,6 +193,7 @@ export function RecentTransactionsTable() {
             );
           })}
 
+          </div>
           {/* Pagination */}
           <div
             style={{
@@ -231,7 +236,7 @@ export function RecentTransactionsTable() {
               ))}
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

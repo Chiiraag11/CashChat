@@ -58,21 +58,21 @@ function renderChart(result: ChatApiResponse) {
   if (result.chartType === 'line') {
     return (
       <LineChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--grid-line)" vertical={false} />
         <XAxis dataKey="label" tick={{ fontSize: 11, fill: 'var(--text-3)' }} axisLine={false} tickLine={false} />
         <YAxis tick={{ fontSize: 11, fill: 'var(--text-3)' }} axisLine={false} tickLine={false} width={50} />
-        <Tooltip content={<ChartTooltip />} cursor={{ stroke: 'rgba(255,255,255,0.06)' }} />
-        <Line type="monotone" dataKey="value" stroke="#00C896" strokeWidth={2} dot={false} activeDot={{ r: 4, fill: '#00C896', strokeWidth: 0 }} />
+        <Tooltip content={<ChartTooltip />} cursor={{ stroke: 'var(--chart-cursor)' }} />
+        <Line type="monotone" dataKey="value" stroke="var(--emerald)" strokeWidth={2} dot={false} activeDot={{ r: 4, fill: 'var(--emerald)', strokeWidth: 0 }} />
       </LineChart>
     );
   }
 
   return (
     <BarChart data={data}>
-      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+      <CartesianGrid strokeDasharray="3 3" stroke="var(--grid-line)" vertical={false} />
       <XAxis dataKey="label" tick={{ fontSize: 11, fill: 'var(--text-3)' }} axisLine={false} tickLine={false} />
       <YAxis tick={{ fontSize: 11, fill: 'var(--text-3)' }} axisLine={false} tickLine={false} width={50} />
-      <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
+      <Tooltip content={<ChartTooltip />} cursor={{ fill: 'var(--chart-cursor)', fillOpacity: 0.4 }} />
       <Bar dataKey="value" fill="#00C896" radius={[4, 4, 0, 0]} opacity={0.85} />
     </BarChart>
   );
@@ -142,7 +142,7 @@ export function ResultRenderer({ result }: { result: ChatApiResponse }) {
                 gridTemplateColumns: `repeat(${Object.values(row).length}, 1fr)`,
                 padding: '8px 12px',
                 borderBottom: i < result.rows.length - 1 ? '1px solid var(--border)' : 'none',
-                background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.01)',
+                background: i % 2 === 0 ? 'transparent' : 'color-mix(in srgb, var(--surface-2) 45%, transparent)',
               }}
             >
               {Object.values(row).map((val, j) => (

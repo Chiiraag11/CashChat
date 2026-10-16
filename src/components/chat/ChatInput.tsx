@@ -56,7 +56,7 @@ export function ChatInput({
           borderRadius: '14px',
           padding: '10px 10px 10px 14px',
           transition: 'border-color 0.2s, box-shadow 0.2s',
-          boxShadow: value ? '0 0 0 3px rgba(0,200,150,0.06)' : 'none',
+          boxShadow: value ? '0 0 0 3px var(--emerald-dim)' : 'none',
         }}
       >
         <textarea
@@ -66,6 +66,7 @@ export function ChatInput({
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={handleKeyDown}
           disabled={disabled}
+          aria-label="Ask a question about your spending"
           placeholder="Ask about your spending — e.g. 'How much did I spend on food last month?'"
           style={{
             flex: 1,
@@ -86,12 +87,13 @@ export function ChatInput({
           type="button"
           onClick={handleSubmit}
           disabled={!canSend}
+          aria-label="Send question"
           style={{
             width: '32px',
             height: '32px',
             borderRadius: '9px',
             background: canSend
-              ? 'linear-gradient(135deg, var(--emerald), #00A87A)'
+              ? 'linear-gradient(135deg, var(--brand-from), var(--brand-to))'
               : 'var(--surface-3)',
             border: 'none',
             cursor: canSend ? 'pointer' : 'not-allowed',
@@ -100,7 +102,7 @@ export function ChatInput({
             justifyContent: 'center',
             transition: 'all 0.2s',
             flexShrink: 0,
-            boxShadow: canSend ? '0 2px 8px rgba(0,200,150,0.25)' : 'none',
+            boxShadow: canSend ? '0 2px 8px var(--emerald-glow)' : 'none',
           }}
         >
           <ArrowUp

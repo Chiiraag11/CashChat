@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import {
   LayoutDashboard,
   MessageSquare,
@@ -9,20 +10,17 @@ import {
   CreditCard,
   Settings,
   HelpCircle,
-  Zap,
   Mail,
+  X,
 } from 'lucide-react';
+import { Logo } from '@/components/brand/Logo';
 
 const NAV_ITEMS = [
-  { href: '/dashboard', label: 'Overview',   icon: LayoutDashboard },
-  { href: '/chat',      label: 'Ask CashChat', icon: MessageSquare },
-  { href: '/trends',    label: 'Trends',      icon: TrendingUp },
-  { href: '/accounts',  label: 'Accounts',    icon: CreditCard },
-  {
-  href: '/mandates',
-  label: 'Check UPI Mandates',
-  icon: Mail,
-},
+  { href: '/dashboard', label: 'Overview',           icon: LayoutDashboard },
+  { href: '/chat',      label: 'Ask CashChat',       icon: MessageSquare },
+  { href: '/trends',    label: 'Trends',             icon: TrendingUp },
+  { href: '/accounts',  label: 'Accounts',           icon: CreditCard },
+  { href: '/mandates',  label: 'Check UPI Mandates', icon: Mail },
 ];
 
 const NAV_BOTTOM = [
@@ -30,145 +28,51 @@ const NAV_BOTTOM = [
   { href: '/help',     label: 'Help',     icon: HelpCircle },
 ];
 
-export function Sidebar() {
+function initials(name?: string | null, email?: string | null) {
+  const source = (name || email || '').trim();
+  if (!source) return 'U';
+  const parts = source.split(/[\s@._-]+/).filter(Boolean);
+  return ((parts[0]?.[0] ?? '') + (parts[1]?.[0] ?? '')).toUpperCase() || 'U';
+}
+
+export function Sidebar({ onNavigate, onClose }: { onNavigate?: () => void; onClose?: () => void }) {
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const user = session?.user;
 
   return (
-    <aside
-      style={{
-        width: '220px',
-        minWidth: '220px',
-        background: 'var(--bg-subtle)',
-        borderRight: '1px solid var(--border)',
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '0',
-        height: '100vh',
-        position: 'sticky',
-        top: 0,
-      }}
-    >
+    <aside className="shell-sidebar">
       {/* Logo */}
-      <div
-        style={{
-          padding: '20px 20px 0',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          marginBottom: '8px',
-        }}
-      >
-        <div
-          style={{
-            width: '30px',
-            height: '30px',
-            borderRadius: '8px',
-            background: 'linear-gradient(135deg, var(--emerald), #00A87A)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 0 16px rgba(0,200,150,0.3)',
-            flexShrink: 0,
-          }}
-        >
-          <Zap size={16} color="#fff" strokeWidth={2.5} />
-        </div>
-        <span
-          style={{
-            fontSize: '15px',
-            fontWeight: '700',
-            color: 'var(--text-1)',
-            letterSpacing: '-0.02em',
-          }}
-        >
-          CashChat
-        </span>
+      <div style={{ padding: '18px 16px 6px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Link href="/dashboard" onClick={onNavigate} style={{ textDecoration: 'none' }} aria-label="CashChat home">
+          <Logo />
+        </Link>
+        {onClose && (
+          <button type="button" className="icon-btn" onClick={onClose} aria-label="Close menu">
+            <X size={16} />
+          </button>
+        )}
       </div>
 
-      {/* Label */}
       <div style={{ padding: '16px 20px 6px' }}>
-        <span
-          style={{
-            fontSize: '10px',
-            fontWeight: '600',
-            color: 'var(--text-3)',
-            letterSpacing: '0.08em',
-            textTransform: 'uppercase',
-          }}
-        >
+        <span style={{ fontSize: 10, fontWeight: 600, color: 'var(--text-3)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
           Menu
         </span>
       </div>
 
       {/* Primary nav */}
-      <nav style={{ padding: '0 10px', flex: 1 }}>
+      <nav style={{ padding: '0 10px', flex: 1, overflowY: 'auto' }} aria-label="Primary">
         {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
-          const active = pathname?.startsWith(href);
+          const active = !!pathname?.startsWith(href);
           return (
-            <Link
-              key={href}
-              href={href}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '8px 10px',
-                borderRadius: '8px',
-                marginBottom: '2px',
-                fontSize: '13px',
-                fontWeight: active ? '600' : '450',
-                color: active ? 'var(--text-1)' : 'var(--text-2)',
-                background: active ? 'var(--surface-3)' : 'transparent',
-                textDecoration: 'none',
-                transition: 'all 0.15s',
-                position: 'relative',
-              }}
-              onMouseEnter={(e) => {
-                if (!active) {
-                  (e.currentTarget as HTMLElement).style.background = 'var(--surface-2)';
-                  (e.currentTarget as HTMLElement).style.color = 'var(--text-1)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!active) {
-                  (e.currentTarget as HTMLElement).style.background = 'transparent';
-                  (e.currentTarget as HTMLElement).style.color = 'var(--text-2)';
-                }
-              }}
-            >
-              {/* Active indicator */}
-              {active && (
-                <span
-                  style={{
-                    position: 'absolute',
-                    left: '0',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    width: '3px',
-                    height: '16px',
-                    background: 'var(--emerald)',
-                    borderRadius: '0 3px 3px 0',
-                    boxShadow: '0 0 8px var(--emerald)',
-                  }}
-                />
-              )}
-              <Icon
-                size={15}
-                strokeWidth={active ? 2.2 : 1.8}
-                color={active ? 'var(--emerald)' : 'currentColor'}
-              />
+            <Link key={href} href={href} onClick={onNavigate} className="nav-link" data-active={active} aria-current={active ? 'page' : undefined}>
+              <Icon size={15} strokeWidth={active ? 2.2 : 1.8} />
               {label}
               {label === 'Ask CashChat' && (
                 <span
                   style={{
-                    marginLeft: 'auto',
-                    fontSize: '9px',
-                    fontWeight: '600',
-                    padding: '2px 5px',
-                    borderRadius: '4px',
-                    background: 'var(--violet-dim, rgba(139,92,246,0.12))',
-                    color: 'var(--violet)',
-                    letterSpacing: '0.04em',
+                    marginLeft: 'auto', fontSize: 9, fontWeight: 700, padding: '2px 6px', borderRadius: 5,
+                    background: 'var(--violet-dim)', color: 'var(--violet-text)', letterSpacing: '0.04em',
                   }}
                 >
                   AI
@@ -179,116 +83,52 @@ export function Sidebar() {
         })}
       </nav>
 
-      {/* Bottom section */}
+      {/* Bottom links */}
       <div style={{ padding: '0 10px' }}>
-        <div
-          style={{
-            height: '1px',
-            background: 'var(--border)',
-            margin: '8px 4px 8px',
-          }}
-        />
-        {NAV_BOTTOM.map(({ href, label, icon: Icon }) => (
-          <Link
-            key={href}
-            href={href}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              padding: '8px 10px',
-              borderRadius: '8px',
-              marginBottom: '2px',
-              fontSize: '13px',
-              fontWeight: '450',
-              color: 'var(--text-2)',
-              textDecoration: 'none',
-              transition: 'all 0.15s',
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background = 'var(--surface-2)';
-              (e.currentTarget as HTMLElement).style.color = 'var(--text-1)';
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background = 'transparent';
-              (e.currentTarget as HTMLElement).style.color = 'var(--text-2)';
-            }}
-          >
-            <Icon size={15} strokeWidth={1.8} />
-            {label}
-          </Link>
-        ))}
+        <div style={{ height: 1, background: 'var(--border)', margin: '8px 4px' }} />
+        {NAV_BOTTOM.map(({ href, label, icon: Icon }) => {
+          const active = !!pathname?.startsWith(href);
+          return (
+            <Link key={href} href={href} onClick={onNavigate} className="nav-link" data-active={active}>
+              <Icon size={15} strokeWidth={1.8} />
+              {label}
+            </Link>
+          );
+        })}
       </div>
 
-      {/* User pill */}
-      <div
-        style={{
-          padding: '12px 10px 16px',
-        }}
-      >
-        <button
+      {/* Signed-in user */}
+      <div style={{ padding: '10px 10px 14px' }}>
+        <div
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            width: '100%',
-            padding: '8px 10px',
-            borderRadius: '10px',
-            background: 'var(--surface)',
-            border: '1px solid var(--border)',
-            cursor: 'pointer',
-            transition: 'all 0.15s',
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLElement).style.borderColor = 'var(--border-strong)';
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)';
+            display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: 12,
+            background: 'var(--surface)', border: '1px solid var(--border)',
           }}
         >
-          <div
-            style={{
-              width: '26px',
-              height: '26px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, var(--emerald), var(--violet))',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '10px',
-              fontWeight: '700',
-              color: '#fff',
-              flexShrink: 0,
-            }}
-          >
-            CP
-          </div>
-          <div style={{ flex: 1, textAlign: 'left', overflow: 'hidden' }}>
+          {user?.image ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={user.image} alt="" width={28} height={28} referrerPolicy="no-referrer" style={{ borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
+          ) : (
             <div
               style={{
-                fontSize: '12px',
-                fontWeight: '600',
-                color: 'var(--text-1)',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
+                width: 28, height: 28, borderRadius: '50%', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: 'linear-gradient(135deg, var(--brand-from), var(--violet))', color: '#fff', fontSize: 10, fontWeight: 700,
               }}
             >
-              Chirag Prasad
+              {initials(user?.name, user?.email)}
             </div>
-            <div
-              style={{
-                fontSize: '10px',
-                color: 'var(--text-3)',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-              }}
-            >
-              Pro plan
+          )}
+          <div style={{ minWidth: 0, flex: 1 }}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-1)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {user?.name ?? user?.email ?? 'Signed in'}
             </div>
+            {user?.name && user?.email && (
+              <div style={{ fontSize: 10, color: 'var(--text-3)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {user.email}
+              </div>
+            )}
           </div>
-        </button>
+        </div>
       </div>
     </aside>
   );
