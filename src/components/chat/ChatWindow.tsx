@@ -29,8 +29,9 @@ export function ChatWindow() {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        height: 'calc(100vh - 60px - 48px)',
-        background: 'var(--bg)',
+        flex: 1,
+        minHeight: 420,
+        background: 'var(--bg-subtle)',
         borderRadius: '14px',
         border: '1px solid var(--border)',
         overflow: 'hidden',
@@ -67,11 +68,11 @@ export function ChatWindow() {
                 width: '52px',
                 height: '52px',
                 borderRadius: '16px',
-                background: 'linear-gradient(135deg, var(--emerald), #00A87A)',
+                background: 'linear-gradient(135deg, var(--brand-from), var(--brand-to))',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 0 32px rgba(0,200,150,0.25)',
+                boxShadow: 'var(--shadow-emerald)',
               }}
             >
               <Zap size={24} color="#fff" strokeWidth={2.5} />
@@ -127,7 +128,7 @@ export function ChatWindow() {
                   onMouseEnter={(e) => {
                     (e.currentTarget as HTMLElement).style.borderColor = 'var(--emerald)';
                     (e.currentTarget as HTMLElement).style.color = 'var(--emerald)';
-                    (e.currentTarget as HTMLElement).style.background = 'rgba(0,200,150,0.05)';
+                    (e.currentTarget as HTMLElement).style.background = 'var(--emerald-dim)';
                   }}
                   onMouseLeave={(e) => {
                     (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)';

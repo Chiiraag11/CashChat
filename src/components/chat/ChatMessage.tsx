@@ -1,9 +1,16 @@
+'use client';
+
+import { useSession } from 'next-auth/react';
 import { Zap } from 'lucide-react';
 import { ResultRenderer } from './ResultRenderer';
 import type { ChatMessage as ChatMessageType } from '@/types/chat';
 
 export function ChatMessage({ message }: { message: ChatMessageType }) {
   const isUser = message.role === 'user';
+  const { data: session } = useSession();
+  const source = (session?.user?.name ?? session?.user?.email ?? '').trim();
+  const parts = source.split(/[\s@._-]+/).filter(Boolean);
+  const userInitials = ((parts[0]?.[0] ?? '') + (parts[1]?.[0] ?? '')).toUpperCase() || 'U';
 
   return (
     <div
@@ -21,13 +28,13 @@ export function ChatMessage({ message }: { message: ChatMessageType }) {
             width: '28px',
             height: '28px',
             borderRadius: '8px',
-            background: 'linear-gradient(135deg, var(--emerald), #00A87A)',
+            background: 'linear-gradient(135deg, var(--brand-from), var(--brand-to))',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexShrink: 0,
             marginTop: '2px',
-            boxShadow: '0 0 12px rgba(0,200,150,0.2)',
+            boxShadow: 'var(--shadow-emerald)',
           }}
         >
           <Zap size={13} color="#fff" strokeWidth={2.5} />
@@ -38,17 +45,19 @@ export function ChatMessage({ message }: { message: ChatMessageType }) {
       <div
         style={{
           maxWidth: '72%',
+          width: message.result ? 'min(100%, 640px)' : undefined,
+          minWidth: 0,
           borderRadius: isUser ? '14px 14px 4px 14px' : '4px 14px 14px 14px',
           padding: '12px 16px',
           background: isUser
-            ? 'linear-gradient(135deg, var(--emerald), #00A87A)'
+            ? 'linear-gradient(135deg, var(--brand-from), var(--brand-to))'
             : 'var(--surface)',
           border: isUser ? 'none' : '1px solid var(--border)',
           fontSize: '13px',
           lineHeight: '1.6',
           color: isUser ? '#fff' : 'var(--text-1)',
           boxShadow: isUser
-            ? '0 2px 12px rgba(0,200,150,0.2)'
+            ? '0 2px 12px var(--emerald-glow)'
             : 'var(--shadow-sm)',
         }}
       >
@@ -95,7 +104,7 @@ export function ChatMessage({ message }: { message: ChatMessageType }) {
             color: '#fff',
           }}
         >
-          CP
+          {userInitials}
         </div>
       )}
     </div>
